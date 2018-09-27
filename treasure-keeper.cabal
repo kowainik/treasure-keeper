@@ -1,4 +1,4 @@
-cabal-version:       1.24
+cabal-version:       2.0
 name:                treasure-keeper
 version:             0.0.0
 description:         Accounting tool
@@ -22,8 +22,13 @@ source-repository head
 
 library
   hs-source-dirs:      src
+
   exposed-modules:     TreasureKeeper
                        Prelude
+
+  build-depends:       base-noprelude >= 4.11 && < 5
+                     , relude ^>= 0.3.0
+
   ghc-options:         -Wall
                        -Wincomplete-uni-patterns
                        -Wincomplete-record-updates
@@ -33,8 +38,7 @@ library
                        -fhide-source-paths
                        -Wmissing-export-lists
                        -Wpartial-fields
-  build-depends:       base-noprelude
-                     , relude
+
   default-language:    Haskell2010
   default-extensions:  ConstraintKinds
                        DeriveGeneric
@@ -51,6 +55,10 @@ library
 executable treasure-keeper
   hs-source-dirs:      app
   main-is:             Main.hs
+  build-depends:       base-noprelude
+                     , treasure-keeper
+                     , relude
+
   ghc-options:         -Wall
                        -threaded
                        -rtsopts
@@ -63,9 +71,7 @@ executable treasure-keeper
                        -fhide-source-paths
                        -Wmissing-export-lists
                        -Wpartial-fields
-  build-depends:       base-noprelude
-                     , treasure-keeper
-                     , relude
+
   default-language:    Haskell2010
   default-extensions:  ConstraintKinds
                        DeriveGeneric
@@ -110,4 +116,3 @@ test-suite treasure-keeper-test
                        TupleSections
                        TypeApplications
                        ViewPatterns
-
