@@ -24,10 +24,12 @@ library
   hs-source-dirs:      src
 
   exposed-modules:     TreasureKeeper
+                           Treasure.Core.Record
                        Prelude
 
   build-depends:       base-noprelude >= 4.11 && < 5
                      , relude ^>= 0.3.0
+                     , text
 
   ghc-options:         -Wall
                        -Wincomplete-uni-patterns
