@@ -5,12 +5,12 @@ module Treasure.Tui
 import Brick (App (..), AttrMap, BrickEvent (VtyEvent), Padding (Pad), Widget, attrMap, continue,
               customMain, halt, padTop, str, (<=>))
 import Brick.Focus (focusRingCursor)
-import Brick.Forms (Form, FormFieldState, checkboxField, focusedFormInputAttr, formFocus, formState,
+import Brick.Forms (Form, FormFieldState, checkboxField, focusedFormInputAttr, formFocus,
                     handleFormEvent, invalidFormInputAttr, newForm, renderForm)
 
-import Treasure.Core.Account (Account, prettyAccount, testAccounts)
+import Treasure.Core.Account (Account, prettyAccount)
 import Treasure.Tui.Chest (CheckBox (..), TreasureChest (..), checkBoxL, chestAccountsL,
-                           toCheckBoxes)
+                           initialTreasureChest)
 
 import qualified Brick (on)
 import qualified Brick.Widgets.Border as B
@@ -64,21 +64,11 @@ app = App
     , appAttrMap = const theMap
     }
 
-executeTreasure :: IO ()
-executeTreasure = do
-    newTkForm <- customMain buildVty Nothing app tkForm
-
-    putTextLn $ "The starting form state was:" <> show initialChest
-    putTextLn $ "The final form state was:" <> show (formState newTkForm)
+executeTreasure :: IO (Form TreasureChest e MainBox)
+executeTreasure = customMain buildVty Nothing app $ mkForm initialTreasureChest
   where
     buildVty :: IO V.Vty
     buildVty = do
         v <- V.mkVty =<< V.standardIOConfig
         V.setMode (V.outputIface v) V.Mouse True
         pure v
-
-    initialChest :: TreasureChest
-    initialChest = TreasureChest $ toCheckBoxes testAccounts
-
-    tkForm :: Form TreasureChest e MainBox
-    tkForm = mkForm initialChest

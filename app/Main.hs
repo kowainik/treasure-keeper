@@ -1,4 +1,4 @@
-import Treasure.Tui (executeTreasure)
+import Treasure (openTreasureChest)
 
 main :: IO ()
-main = executeTreasure
+main = openTreasureChest

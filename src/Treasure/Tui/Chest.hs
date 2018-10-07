@@ -8,6 +8,7 @@ in the form.
 module Treasure.Tui.Chest
        ( -- * Data types
          TreasureChest (..)
+       , initialTreasureChest
        , CheckBox (..)
        , toCheckBoxes
 
@@ -16,9 +17,9 @@ module Treasure.Tui.Chest
        , checkBoxL
        ) where
 
-import Control.Lens (Lens', ix, lens, (.~))
+import Lens.Micro (Lens', ix, lens, (.~))
 
-import Treasure.Core.Account (Account)
+import Treasure.Core.Account (Account, testAccounts)
 
 import qualified Relude.Unsafe as Unsafe
 
@@ -35,8 +36,8 @@ toCheckBoxes :: [a] -> [CheckBox a]
 toCheckBoxes = map (`CheckBox` False)
 
 -- | Lens for 'checkboxFlag' field of the 'CheckBox' data type.
-flag :: Lens' (CheckBox a) Bool
-flag = lens checkboxFlag $ \checkbox newFlag -> checkbox { checkboxFlag = newFlag }
+flagL :: Lens' (CheckBox a) Bool
+flagL = lens checkboxFlag $ \checkbox newFlag -> checkbox { checkboxFlag = newFlag }
 
 {- |
 -}
@@ -47,7 +48,7 @@ checkBoxL i = lens getAt setAt
     getAt l = checkboxFlag $ Unsafe.at i l
 
     setAt :: [CheckBox a] -> Bool -> [CheckBox a]
-    setAt l newBool = l & ix i . flag .~ newBool
+    setAt l newBool = l & ix i . flagL .~ newBool
 
 
 -- | Global TUI state.
@@ -59,3 +60,7 @@ data TreasureChest = TreasureChest
 chestAccountsL :: Lens' TreasureChest [CheckBox Account]
 chestAccountsL = lens chestAccounts $ \chest newAccounts ->
     chest { chestAccounts = newAccounts }
+
+-- | Initial global state of the tui.
+initialTreasureChest :: TreasureChest
+initialTreasureChest = TreasureChest $ toCheckBoxes testAccounts
