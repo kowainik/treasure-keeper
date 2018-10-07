@@ -33,5 +33,5 @@ mkTag tag
     | otherwise  = Just (Tag tag)
 
 newtype Amount = Amount
-    { unAmount :: Ratio Natural
-    }
+    { unAmount :: Rational
+    } deriving newtype (Eq, Ord, Num)
