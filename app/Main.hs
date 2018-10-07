@@ -1,5 +1,4 @@
-import TreasureKeeper (someFunc)
+import Treasure.Tui (executeTreasure)
 
 main :: IO ()
-main = someFunc
-
+main = executeTreasure

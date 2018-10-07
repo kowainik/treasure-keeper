@@ -25,11 +25,17 @@ library
 
   exposed-modules:     TreasureKeeper
                            Treasure.Core.Record
+                           Treasure.Core.Account
+                           Treasure.Tui
+                               Treasure.Tui.Chest
                        Prelude
 
   build-depends:       base-noprelude >= 4.11 && < 5
+                     , brick ^>= 0.41
+                     , lens ^>= 4.17
                      , relude ^>= 0.3.0
                      , text
+                     , vty ^>= 5.24
 
   ghc-options:         -Wall
                        -Wincomplete-uni-patterns
