@@ -7,13 +7,16 @@ module Treasure.Core.Record
        , Amount (..)
        ) where
 
+import Treasure.Core.Account (Account)
+
 import qualified Data.Text as T
+
 
 {- | Expenses record.
 -}
 data Record = Record
     { -- | Account from what we're spending money
-      recordAccountFrom :: Undefined
+      recordAccountFrom :: Account
 
       -- | Tags for the spent amount of money.
     , recordTags        :: NonEmpty Tag

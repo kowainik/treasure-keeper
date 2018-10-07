@@ -23,13 +23,19 @@ source-repository head
 library
   hs-source-dirs:      src
 
-  exposed-modules:     TreasureKeeper
+  exposed-modules:     Treasure
                            Treasure.Core.Record
+                           Treasure.Core.Account
+                           Treasure.Tui
+                               Treasure.Tui.Chest
                        Prelude
 
   build-depends:       base-noprelude >= 4.11 && < 5
+                     , brick ^>= 0.41
+                     , microlens ^>= 0.4
                      , relude ^>= 0.3.0
                      , text
+                     , vty ^>= 5.24
 
   ghc-options:         -Wall
                        -Wincomplete-uni-patterns

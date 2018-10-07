@@ -1,5 +1,4 @@
-import TreasureKeeper (someFunc)
+import Treasure (openTreasureChest)
 
 main :: IO ()
-main = someFunc
-
+main = openTreasureChest

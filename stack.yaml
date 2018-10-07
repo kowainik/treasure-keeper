@@ -2,7 +2,9 @@ resolver: lts-12.10
 
 extra-deps:
   - base-noprelude-4.11.1.0
+  - brick-0.41.2
   - relude-0.3.0
+  - vty-5.24
 
 ghc-options:
   "$locals": -fhide-source-paths
