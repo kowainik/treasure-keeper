@@ -5,10 +5,10 @@ module Treasure.Tui
        ) where
 
 import Brick (App (..), AttrMap, BrickEvent (VtyEvent), Padding (Pad), Widget, attrMap, continue,
-              customMain, halt, padTop, str, (<=>))
+              customMain, hBox, halt, padTop, str, vBox, (<=>))
 import Brick.Focus (focusRingCursor)
-import Brick.Forms (Form, FormFieldState, checkboxField, focusedFormInputAttr, formFocus,
-                    handleFormEvent, invalidFormInputAttr, newForm, renderForm)
+import Brick.Forms (Form, FormFieldState (..), checkboxField, focusedFormInputAttr, formFocus,
+                    handleFormEvent, invalidFormInputAttr, newForm, renderForm, setFormConcat)
 import Lens.Micro (Lens')
 
 import Treasure.Tui.Chest (CheckBox (..), TreasureChest (..), checkBoxL, chestAccountsL, chestTagsL,
@@ -31,11 +31,10 @@ type TreasureField e = FormFieldState TreasureChest e MainBox
 
 -- Creates the inout form from the given initial 'TreasureChest'.
 mkForm :: forall e . TreasureChest -> Form TreasureChest e MainBox
-mkForm t@TreasureChest{..} = newForm
+mkForm t@TreasureChest{..} = setFormConcat myBox $ newForm
     ( toCheckBoxGroup "Accounts" chestAccountsL AccountsField chestAccounts
    ++ toCheckBoxGroup "Tags"     chestTagsL     TagsField     chestTags
-    )
-    t
+    ) t
   where
     toCheckBoxGroup
         :: forall a . Show a
@@ -52,6 +51,10 @@ mkForm t@TreasureChest{..} = newForm
             (chestL . checkBoxL i)
             (field i)
             (show checkboxData)
+
+    myBox :: [Widget MainBox] -> Widget MainBox
+    myBox ws = let (a, b) = splitAt (length chestAccounts) ws in
+        hBox [vBox a, vBox b]
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
