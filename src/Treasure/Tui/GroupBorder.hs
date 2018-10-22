@@ -16,6 +16,8 @@ import Brick (Edges (..), Padding (Max), Widget, padRight, str, vLimit, (<+>), (
 import Brick.Forms (FormFieldState, (@@=))
 
 import qualified Brick.Widgets.Border as B
+import qualified Brick.Widgets.Border.Style as B
+import qualified Brick.Widgets.Core as B
 
 
 {- |
@@ -47,6 +49,7 @@ groupBorder groupName  = \case
 -- | Creates the top border with the group name.
 groupBorderTop :: String -> (s -> FormFieldState s e n) -> (s -> FormFieldState s e n)
 groupBorderTop groupName = (@@=) (vLimit 2
+    . B.withBorderStyle B.unicodeBold
     . ((tl <=> B.vBorder) <+>)
     . (<+> (tr <=> B.vBorder))
     . (B.hBorderWithLabel (str groupName) <=>)
@@ -55,6 +58,7 @@ groupBorderTop groupName = (@@=) (vLimit 2
 -- | Creates the bottom border of the group.
 groupBorderBottom :: (s -> FormFieldState s e n) -> (s -> FormFieldState s e n)
 groupBorderBottom = (@@=) (vLimit 2
+    . B.withBorderStyle B.unicodeBold
     . ((B.vBorder <=> bl) <+>)
     . (<+> (B.vBorder <=> br))
     . (<=> B.hBorder)
@@ -64,6 +68,7 @@ groupBorderBottom = (@@=) (vLimit 2
 -- | Creates the left and right borders for the middle elements of the group.
 groupBorderMid :: (s -> FormFieldState s e n) -> (s -> FormFieldState s e n)
 groupBorderMid = (@@=) (vLimit 1
+    . B.withBorderStyle B.unicodeBold
     . (B.vBorder <+>)
     . (<+> B.vBorder)
     . padRight Max
@@ -71,7 +76,7 @@ groupBorderMid = (@@=) (vLimit 1
 
 -- | Creates the border around the only one element.
 groupAllBorders :: String -> (s -> FormFieldState s e n) -> (s -> FormFieldState s e n)
-groupAllBorders groupName = (@@=) (B.borderWithLabel (str groupName) . padRight Max)
+groupAllBorders groupName = (@@=) (B.withBorderStyle B.unicodeBold . B.borderWithLabel (str groupName) . padRight Max)
 
 
 -- | Helpers for the correct border lines.
