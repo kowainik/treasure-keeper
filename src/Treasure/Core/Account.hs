@@ -3,22 +3,23 @@ This module containes all nessecary functional to work with 'Account's.
 -}
 module Treasure.Core.Account
        ( Account (..)
-       , prettyAccount
+
        , testAccounts
        ) where
 
+import qualified Text.Show as Show
 
 data Account = Account
     { accountName  :: Text
     , accountNick  :: Text
     , accountEmoji :: Text
-    } deriving (Show, Eq)
+    } deriving (Eq)
+
+instance Show Account where
+    show = toString . accountNick
 
 testAccounts :: [Account]
 testAccounts =
     [ Account "Dmitrii" "shersh" "🙂"
     , Account "Veronika" "vrom911" "😉"
     ]
-
-prettyAccount :: Account -> Text
-prettyAccount Account{..} = accountEmoji <> " " <> accountNick

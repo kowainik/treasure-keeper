@@ -1,3 +1,5 @@
+{-# LANGUAGE Rank2Types #-}
+
 module Treasure.Tui
        ( executeTreasure
        ) where
@@ -7,10 +9,11 @@ import Brick (App (..), AttrMap, BrickEvent (VtyEvent), Padding (Pad), Widget, a
 import Brick.Focus (focusRingCursor)
 import Brick.Forms (Form, FormFieldState, checkboxField, focusedFormInputAttr, formFocus,
                     handleFormEvent, invalidFormInputAttr, newForm, renderForm)
+import Lens.Micro (Lens')
 
-import Treasure.Core.Account (Account, prettyAccount)
-import Treasure.Tui.Chest (CheckBox (..), TreasureChest (..), checkBoxL, chestAccountsL,
+import Treasure.Tui.Chest (CheckBox (..), TreasureChest (..), checkBoxL, chestAccountsL, chestTagsL,
                            initialTreasureChest)
+import Treasure.Tui.GroupBorder (groupBorder)
 
 import qualified Brick (on)
 import qualified Brick.Widgets.Border as B
@@ -21,21 +24,34 @@ import qualified Graphics.Vty as V
 
 data MainBox
     = AccountsField Int
+    | TagsField Int
     deriving (Eq, Ord, Show)
 
+type TreasureField e = FormFieldState TreasureChest e MainBox
 
 -- Creates the inout form from the given initial 'TreasureChest'.
 mkForm :: forall e . TreasureChest -> Form TreasureChest e MainBox
-mkForm t = newForm (map makeCheckBox $ zip [0..] $ chestAccounts t) t
+mkForm t@TreasureChest{..} = newForm
+    ( toCheckBoxGroup "Accounts" chestAccountsL AccountsField chestAccounts
+   ++ toCheckBoxGroup "Tags"     chestTagsL     TagsField     chestTags
+    )
+    t
   where
-    makeCheckBox
-        :: (Int, CheckBox Account)
-        -> TreasureChest
-        -> FormFieldState TreasureChest e MainBox
-    makeCheckBox (i, CheckBox{..}) = checkboxField
-        (chestAccountsL . checkBoxL i)
-        (AccountsField i)
-        (prettyAccount checkboxData)
+    toCheckBoxGroup
+        :: forall a . Show a
+        => String
+        -> Lens' TreasureChest [CheckBox a]
+        -> (Int -> MainBox)
+        -> [CheckBox a]
+        -> [TreasureChest -> TreasureField e]
+    toCheckBoxGroup groupName chestL field ch = groupBorder groupName
+        (map makeCheckBox $ zip [0..] ch)
+      where
+        makeCheckBox :: (Int, CheckBox a) -> TreasureChest -> TreasureField e
+        makeCheckBox (i, CheckBox{..}) = checkboxField
+            (chestL . checkBoxL i)
+            (field i)
+            (show checkboxData)
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
