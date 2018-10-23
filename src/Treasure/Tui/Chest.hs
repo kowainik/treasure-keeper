@@ -9,17 +9,21 @@ module Treasure.Tui.Chest
        ( -- * Data types
          TreasureChest (..)
        , initialTreasureChest
+
+         -- * Check boxes
        , CheckBox (..)
        , toCheckBoxes
 
          -- * Lenses
        , chestAccountsL
+       , chestTagsL
        , checkBoxL
        ) where
 
 import Lens.Micro (Lens', ix, lens, (.~))
 
 import Treasure.Core.Account (Account, testAccounts)
+import Treasure.Core.Record (Tag, testTags)
 
 import qualified Relude.Unsafe as Unsafe
 
@@ -54,6 +58,7 @@ checkBoxL i = lens getAt setAt
 -- | Global TUI state.
 data TreasureChest = TreasureChest
     { chestAccounts :: [CheckBox Account]
+    , chestTags     :: [CheckBox Tag]
     } deriving (Show)
 
 -- | Lens for 'chestAccounts' field of the 'TreasureChest'.
@@ -61,6 +66,14 @@ chestAccountsL :: Lens' TreasureChest [CheckBox Account]
 chestAccountsL = lens chestAccounts $ \chest newAccounts ->
     chest { chestAccounts = newAccounts }
 
+-- | Lens for 'chestTags' field of the 'TreasureChest'.
+chestTagsL :: Lens' TreasureChest [CheckBox Tag]
+chestTagsL = lens chestTags $ \chest newTags ->
+    chest { chestTags = newTags }
+
 -- | Initial global state of the tui.
 initialTreasureChest :: TreasureChest
-initialTreasureChest = TreasureChest $ toCheckBoxes testAccounts
+initialTreasureChest = TreasureChest
+    { chestAccounts = toCheckBoxes testAccounts
+    , chestTags = toCheckBoxes testTags
+    }

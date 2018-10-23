@@ -24,10 +24,11 @@ library
   hs-source-dirs:      src
 
   exposed-modules:     Treasure
-                           Treasure.Core.Record
                            Treasure.Core.Account
+                           Treasure.Core.Record
                            Treasure.Tui
                                Treasure.Tui.Chest
+                               Treasure.Tui.GroupBorder
                        Prelude
 
   build-depends:       base-noprelude >= 4.11 && < 5

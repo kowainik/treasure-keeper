@@ -3,6 +3,7 @@ module Treasure.Core.Record
 
        , Tag (..)
        , mkTag
+       , testTags
 
        , Amount (..)
        ) where
@@ -28,7 +29,10 @@ data Record = Record
 -- | Expense record tag. Can be used for search.
 newtype Tag = Tag
     { unTag :: Text
-    }
+    } deriving newtype (Show)
+
+testTags :: [Tag]
+testTags = [Tag "Food", Tag "Utilities"]
 
 mkTag :: Text -> Maybe Tag
 mkTag tag
